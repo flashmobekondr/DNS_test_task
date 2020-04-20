@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class NameForm extends StatelessWidget {
+  final bool isNameValid;
   final TextEditingController nameController;
 
-  NameForm({this.nameController});
+  NameForm({this.nameController,this.isNameValid});
 
   @override
   Widget build(BuildContext context) {
@@ -15,29 +16,18 @@ class NameForm extends StatelessWidget {
       ),
       child: TextFormField(
         controller: nameController,
-        validator: validateFunction,
+        autovalidate: true,
+        validator: (_) {
+          return isNameValid ? null : 'Неправильное Имя';
+        },
         textInputAction: TextInputAction.next,
         onFieldSubmitted: (_) {
           FocusScope.of(context).nextFocus();
         },
         decoration: InputDecoration(
           hintText: "Имя",
-          suffix: GestureDetector(
-            child: Icon(
-              Icons.clear,
-              color: Colors.grey,
-            ),
-            onTap: () => nameController.clear(),
-          ),
         ),
       ),
     );
-  }
-
-  String validateFunction(String value) {
-    if (value.isEmpty) {
-      return 'Введите данные';
-    }
-    return null;
   }
 }

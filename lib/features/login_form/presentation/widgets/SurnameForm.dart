@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class SurnameForm extends StatelessWidget {
+  final bool isSurnameValid;
   final TextEditingController surnameController;
-  SurnameForm({this.surnameController});
+  SurnameForm({this.surnameController,this.isSurnameValid});
 
   @override
   Widget build(BuildContext context) {
@@ -10,28 +11,18 @@ class SurnameForm extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 15.0),
       child: TextFormField(
         controller: surnameController,
-        validator: validateFunction,
+        autovalidate: true,
+        validator: (_) {
+          return isSurnameValid ? null : 'Неправильная Фамилия';
+        },
         textInputAction: TextInputAction.next,
         onFieldSubmitted: (_) {
           FocusScope.of(context).nextFocus();
         },
         decoration: InputDecoration(
           hintText: 'Фамилия',
-          suffix: GestureDetector(
-            child: Icon(
-              Icons.clear,
-              color: Colors.grey,
-            ),
-            onTap: () => surnameController.clear(),
-          ),
         ),
       ),
     );
-  }
-  String validateFunction(String value) {
-    if (value.isEmpty) {
-      return 'Введите данные';
-    }
-    return null;
   }
 }

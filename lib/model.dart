@@ -2,7 +2,9 @@ class Token {
   final String token;
   final int code;
   final String message;
+
   Token({this.token,this.code,this.message});
+
   factory Token.fromJson(Map<String, dynamic> json) {
     return Token(
       token: json['data'],

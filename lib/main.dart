@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
-import 'Pages/InputDataPage.dart';
-import 'Pages/SendDataPage.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dnstestapi/features/login_form/presentation/bloc/first_page_login_bloc/bloc.dart';
+import 'package:dnstestapi/features/login_form/presentation/pages/first_screen.dart';
+import 'injection_container.dart' as di;
 
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await di.init();
+  runApp(MyApp1());
+}
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-
+class MyApp1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'DNS Test task',
-      theme: ThemeData(
-        primarySwatch: Colors.orange,
+    return BlocProvider<FirstPageBloc>(
+      create: (context) => di.sl<FirstPageBloc>(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.orange
+        ),
+        home: FirstPage(),
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => InputForm(),
-        '/sendForm': (context) => SendData(),
-      },
     );
   }
 }
+
 
