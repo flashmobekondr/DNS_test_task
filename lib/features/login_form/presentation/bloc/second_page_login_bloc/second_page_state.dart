@@ -1,6 +1,13 @@
 import 'package:equatable/equatable.dart';
 
-class ValidateStateSecond extends Equatable {
+abstract class SecondStatePage extends Equatable {
+  const SecondStatePage();
+
+  @override
+  List<Object> get props => [];
+}
+
+class ValidateStateSecond extends SecondStatePage {
   final String github;
   final bool isGithubValid;
   final String resume;
@@ -57,6 +64,6 @@ class ValidateStateSecond extends Equatable {
   }
 }
 
-class DataSentState extends ValidateStateSecond {}
-class LoadingStateSecond extends ValidateStateSecond {}
-class ErrorStateSecond extends ValidateStateSecond {}
+class DataSentState extends SecondStatePage {}
+class LoadingStateSecond extends SecondStatePage {}
+class ErrorStateSecond extends SecondStatePage {}

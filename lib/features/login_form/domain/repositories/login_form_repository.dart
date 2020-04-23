@@ -11,4 +11,5 @@ abstract class LoginFormRepository {
       String github,
       String resume
       );
+  bool hasToken();
 }

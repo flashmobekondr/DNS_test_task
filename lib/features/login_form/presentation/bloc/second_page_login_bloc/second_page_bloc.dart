@@ -7,7 +7,7 @@ import 'package:dnstestapi/features/login_form/domain/usecases/validate_data.dar
 import 'package:dnstestapi/features/login_form/domain/entities/token.dart';
 
 
-class SecondPageBloc extends Bloc<SecondPageEvent, ValidateStateSecond> {
+class SecondPageBloc extends Bloc<SecondPageEvent, SecondStatePage> {
   final Validate validate;
   final SendPersonal sendPersonal;
   final SharedPreferences sharedPreferences;
@@ -15,38 +15,41 @@ class SecondPageBloc extends Bloc<SecondPageEvent, ValidateStateSecond> {
    this.validate,
    this.sendPersonal,
    this.sharedPreferences
-});
+}) : assert(validate != null),
+    assert(sendPersonal != null);
 
   @override
-  ValidateStateSecond get initialState => ValidateStateSecond.initial();
+  SecondStatePage get initialState => ValidateStateSecond.initial();
 
   @override
-  Stream<ValidateStateSecond> mapEventToState(
+  Stream<SecondStatePage> mapEventToState(
     SecondPageEvent event,
   ) async* {
-    if (event is GithubChanged) {
-      yield state.copyWith(
-        github: event.github,
-        isGithubValid: validate.interactor.isUrlValid(event.github)
-      );
-    }
-    if (event is ResumeChanged) {
-      yield state.copyWith(
-        resume: event.resume,
-        isResumeValid: validate.interactor.isUrlValid(event.resume)
-      );
-    }
-    if (event is FormSubmittedSecond) {
-      final currentState = state;
-      yield LoadingStateSecond();
-      try {
-        final result = await sendPersonal.send(
-            currentState.github,
-            currentState.resume);
-      } catch(e) {
-        yield ErrorStateSecond();
+    final currentState = state;
+    if (currentState is ValidateStateSecond) {
+      if (event is GithubChanged) {
+        yield currentState.copyWith(
+            github: event.github,
+            isGithubValid: validate.url(event.github)
+        );
       }
-      yield DataSentState();
+      if (event is ResumeChanged) {
+        yield currentState.copyWith(
+            resume: event.resume,
+            isResumeValid: validate.url(event.resume)
+        );
+      }
+      if (event is FormSubmittedSecond) {
+        yield LoadingStateSecond();
+        try {
+          final result = await sendPersonal.send(
+              currentState.github,
+              currentState.resume);
+        } catch(e) {
+          yield ErrorStateSecond();
+        }
+        yield DataSentState();
+      }
     }
   }
 }

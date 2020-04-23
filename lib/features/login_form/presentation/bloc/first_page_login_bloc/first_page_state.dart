@@ -1,6 +1,12 @@
 import 'package:equatable/equatable.dart';
+abstract class FirstPageState extends Equatable {
+  const FirstPageState();
 
-class FirstValidateState extends Equatable {
+  @override
+  List<Object> get props => [];
+}
+
+class FirstValidateState extends FirstPageState {
   final String name;
   final bool isNameValid;
   final String surname;
@@ -89,6 +95,6 @@ class FirstValidateState extends Equatable {
   }
 }
 
-class MoveToNextScreenState extends FirstValidateState {}
-class LoadingStateFirst extends FirstValidateState {}
-class ErrorStateFirst extends FirstValidateState {}
+//class MoveToNextScreenState extends FirstPageState {}
+class LoadingStateFirst extends FirstPageState {}
+class ErrorStateFirst extends FirstPageState {}

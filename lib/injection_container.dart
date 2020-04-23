@@ -1,5 +1,8 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:dnstestapi/features/login_form/domain/usecases/has_token.dart';
 import 'package:dnstestapi/features/login_form/interactions/interactor/login_form_interactor.dart';
+import 'package:dnstestapi/features/login_form/presentation/bloc/authentication_page_bloc/authentication_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,9 +17,10 @@ import 'package:dnstestapi/features/login_form/domain/usecases/validate_data.dar
 import 'package:dnstestapi/features/login_form/presentation/bloc/first_page_login_bloc/bloc.dart';
 import 'package:dnstestapi/features/login_form/presentation/bloc/second_page_login_bloc/bloc.dart';
 
-final sl = GetIt.instance;
 
+final sl = GetIt.instance;
 Future<void> init () async {
+
   //Bloc
  sl.registerFactory(
          () => FirstPageBloc(
@@ -32,17 +36,24 @@ Future<void> init () async {
            sharedPreferences: sl()
          )
  );
+ sl.registerFactory(
+         () => AuthenticationBloc(
+           token: sl()
+         )
+ );
 
   //Use cases
   sl.registerLazySingleton(() => GetToken(repository: sl()));
   sl.registerLazySingleton(() => SendPersonal(repository: sl()));
   sl.registerLazySingleton(() => Validate(interactor: sl()));
+  sl.registerLazySingleton(() => HasToken(repository: sl()));
 
   //Repository
   sl.registerLazySingleton<LoginFormRepository>(
           () => LoginFormRepositoryImpl(
             remoteDataSource: sl(),
             networkInfo: sl(),
+            sharedPreferences: sl()
           )
   );
 

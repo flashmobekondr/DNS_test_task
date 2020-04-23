@@ -1,10 +1,8 @@
 import 'package:dnstestapi/features/login_form/presentation/bloc/first_page_login_bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dnstestapi/features/login_form/presentation/bloc/second_page_login_bloc/bloc.dart';
 import 'package:dnstestapi/features/login_form/presentation/widgets/Forms.dart';
-import 'package:dnstestapi/features/login_form/presentation/pages/second_screen.dart';
-import 'package:dnstestapi/injection_container.dart';
+import 'package:dnstestapi/features/login_form/presentation/bloc/authentication_page_bloc/bloc.dart';
 
 class FirstPage extends StatefulWidget {
   @override
@@ -45,76 +43,71 @@ class _FirstPageState extends State<FirstPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<FirstPageBloc, FirstValidateState>(
-      listener: (context, state) {
-        if (state is MoveToNextScreenState) {
-          Navigator
-              .of(context)
-              .push(MaterialPageRoute(
-              builder: (context) {
-                return BlocProvider<SecondPageBloc>(
-                  create: (context) =>sl<SecondPageBloc>(),
-                  child: SecondPage(),
-                );
-              }
-          ));
-        }
-        if (state is ErrorStateFirst) {
-          Scaffold.of(context).showSnackBar(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+            'Ввод данных',
+            style: textStyle,
+        ),
+      ),
+      body: BlocListener<FirstPageBloc, FirstPageState>(
+        listener: (context, state) {
+          if (state is ErrorStateFirst) {
+            Scaffold.of(context).showSnackBar(
               SnackBar(
                 content: Text('Error fetching data'),
                 backgroundColor: Colors.red,
-              )
-          );
-        }
-      },
-      child: BlocBuilder<FirstPageBloc,FirstValidateState>(
-        builder: (context, state) {
-          if (state is LoadingStateFirst) {
-            return CircularProgressIndicator();
-          }
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(
-                'Ввод данных',
-                style: textStyle,
               ),
-            ),
-            body: Form(
-              child: Column(
-                children: <Widget>[
-                  NameForm(
-                    nameController: nameController,
-                    isNameValid: state.isNameValid
-                  ),
-                  SurnameForm(
-                    surnameController: surnameController,
-                    isSurnameValid: state.isSurnameValid
-                  ),
-                  EmailForm(
-                    emailController: emailController,
-                    isEmailValid: state.isEmailValid
-                  ),
-                  PhoneForm(
-                    phoneController: phoneController,
-                    isPhoneValid: state.isPhoneValid
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: RaisedButton(
-                      color: Colors.orange,
-                      onPressed: state.isFormValid ?_onSubmitted : null,
-                      child: Text(
-                        'Получить ключ',
-                        style: textStyle,
+            );
+          }
+        },
+        child: BlocBuilder<FirstPageBloc, FirstPageState>(
+          builder: (context, state) {
+            if (state is LoadingStateFirst) {
+              return Scaffold(
+                body: Center(
+                    child: CircularProgressIndicator()
+                ),
+              );
+            }
+            if (state is FirstValidateState) {
+              return Form(
+                child: Column(
+                  children: <Widget>[
+                    NameForm(
+                        nameController: nameController,
+                        isNameValid: state.isNameValid
+                    ),
+                    SurnameForm(
+                        surnameController: surnameController,
+                        isSurnameValid: state.isSurnameValid
+                    ),
+                    EmailForm(
+                        emailController: emailController,
+                        isEmailValid: state.isEmailValid
+                    ),
+                    PhoneForm(
+                        phoneController: phoneController,
+                        isPhoneValid: state.isPhoneValid
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: RaisedButton(
+                        color: Colors.orange,
+                        onPressed: state.isFormValid ?_onSubmitted : null,
+                        child: Text(
+                          'Получить ключ',
+                          style: textStyle,
+                        ),
                       ),
                     ),
-                  )
-                ],
-              ),
-            ),
-          );
-        },
+                  ],
+                ),
+              );
+            }
+            return CircularProgressIndicator();
+          },
+        ),
       ),
     );
   }
@@ -135,7 +128,7 @@ class _FirstPageState extends State<FirstPage> {
     _firstPageBloc.add(PhoneChanged(phone: phoneController.text));
   }
   void _onSubmitted() {
-    _firstPageBloc.add(FormSubmittedFirst());
+    _firstPageBloc.add(FormSubmittedFirst(authenticationBloc: BlocProvider.of<AuthenticationBloc>(context)));
   }
 }
 

@@ -1,3 +1,4 @@
+import 'package:dnstestapi/features/login_form/presentation/bloc/authentication_page_bloc/authentication_bloc.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class FirstPageEvent extends Equatable {
@@ -49,4 +50,10 @@ class PhoneChanged extends FirstPageEvent {
   String toString() => 'PhoneChanged: {phone: $phone}';
 }
 
-class FormSubmittedFirst extends FirstPageEvent {}
+class FormSubmittedFirst extends FirstPageEvent {
+  final AuthenticationBloc authenticationBloc;
+  FormSubmittedFirst({this.authenticationBloc});
+
+  @override
+  List<Object> get props => [authenticationBloc];
+}

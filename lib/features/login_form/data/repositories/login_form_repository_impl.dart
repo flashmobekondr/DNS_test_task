@@ -3,12 +3,19 @@ import 'package:dnstestapi/features/login_form/data/model/login_form_token_model
 import 'package:dnstestapi/features/login_form/domain/entities/token.dart';
 import 'package:dnstestapi/features/login_form/domain/repositories/login_form_repository.dart';
 import 'package:dnstestapi/features/login_form/data/datasources/login_form_remote_data_source.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class LoginFormRepositoryImpl implements LoginFormRepository {
+  final SharedPreferences sharedPreferences;
   final LoginFormRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
-  LoginFormRepositoryImpl({this.remoteDataSource,this.networkInfo});
+
+  LoginFormRepositoryImpl({
+    this.remoteDataSource,
+    this.networkInfo,
+    this.sharedPreferences
+  });
 
   @override
   Future<Token1> getToken(
@@ -43,6 +50,12 @@ class LoginFormRepositoryImpl implements LoginFormRepository {
     } else {
       throw Exception('error no connection');
     }
+  }
+
+  @override
+  bool hasToken() {
+    sharedPreferences.clear();
+    return sharedPreferences.containsKey('CACHED_TOKEN');
   }
 
 }

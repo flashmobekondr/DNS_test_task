@@ -35,57 +35,65 @@ class _SecondPageState extends State<SecondPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SecondPageBloc, ValidateStateSecond>(
-      listener: (context, state) {
-        if (state is ErrorStateSecond) {
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text('Ошибка отправки данных'),
-            backgroundColor: Colors.red,
-          ));
-        }
-        if (state is DataSentState) {
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text('Данные успешно отправлены'),
-            backgroundColor: Colors.red,
-          ));
-        }
-    },
-      child: BlocBuilder<SecondPageBloc, ValidateStateSecond>(
-        builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(
-                'Отправка данных',
-                style: textStyle,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+            'Отправка данных',
+          style: textStyle,
+        ),
+      ),
+      body: BlocListener<SecondPageBloc, SecondStatePage>(
+        listener: (context, state) {
+          if (state is ErrorStateSecond) {
+            Scaffold.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Error fetching data'),
+                backgroundColor: Colors.red,
               ),
-            ),
-            body: Form(
-              child: Column(
-                children: <Widget>[
-                  GithubForm(
-                    githubController: githubController,
-                    isGithubValid: state.isGithubValid,
-                  ),
-                  ResumeForm(
-                    resumeController: resumeController,
-                    isResumeValid: state.isResumeValid,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: RaisedButton(
-                      color: Colors.orange,
-                      onPressed: state.isFormValid ?_onSubmitted : null,
-                      child: Text(
-                        'Зарегистрироваться',
-                        style: textStyle,
+            );
+          }
+        },
+        child: BlocBuilder<SecondPageBloc,SecondStatePage>(
+          builder: (context, state) {
+            if (state is LoadingStateSecond) {
+              return Scaffold(
+                body: Center(
+                    child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            if (state is ValidateStateSecond) {
+              return Form(
+                child: Column(
+                  children: <Widget>[
+                    GithubForm(
+                      githubController: githubController,
+                      isGithubValid: state.isGithubValid,
+                    ),
+                    ResumeForm(
+                      resumeController: resumeController,
+                      isResumeValid: state.isResumeValid,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: RaisedButton(
+                        color: Colors.orange,
+                        onPressed: state.isFormValid ?_onSubmitted : null,
+                        child: Text(
+                          'Зарегистрироваться',
+                          style: textStyle,
+                        ),
                       ),
                     ),
-                  )
-                ],
-              ),
-            ),
-          );
-        },
+                  ],
+                ),
+              );
+            }
+            return Scaffold(
+              body: Center(child: Text('SUCCESS'),),
+            );
+          },
+        ),
       ),
     );
   }
