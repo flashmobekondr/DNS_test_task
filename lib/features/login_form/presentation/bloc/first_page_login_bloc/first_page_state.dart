@@ -15,6 +15,7 @@ class FirstValidateState extends FirstPageState {
   final bool isEmailValid;
   final String phone;
   final bool isPhoneValid;
+  final bool isError;
 
   bool get isFormValid =>  isNameValid &&
                           isSurnameValid &&
@@ -29,7 +30,8 @@ class FirstValidateState extends FirstPageState {
     this.email,
     this.isEmailValid,
     this.phone,
-    this.isPhoneValid
+    this.isPhoneValid,
+    this.isError
 });
 
   factory FirstValidateState.initial() {
@@ -41,7 +43,8 @@ class FirstValidateState extends FirstPageState {
       email: '',
       isEmailValid: false,
       phone: null,
-      isPhoneValid: false
+      isPhoneValid: false,
+      isError: false
     );
   }
 
@@ -54,6 +57,7 @@ class FirstValidateState extends FirstPageState {
      bool isEmailValid,
      String phone,
      bool isPhoneValid,
+     bool isError
 }) {
     return FirstValidateState(
       name: name ?? this.name,
@@ -63,7 +67,8 @@ class FirstValidateState extends FirstPageState {
       email: email ?? this.email,
       isEmailValid: isEmailValid ?? this.isEmailValid,
       phone: phone ?? this.phone,
-      isPhoneValid: isPhoneValid ?? this.isPhoneValid
+      isPhoneValid: isPhoneValid ?? this.isPhoneValid,
+      isError: isError ?? this.isError
     );
 }
 
@@ -77,6 +82,7 @@ class FirstValidateState extends FirstPageState {
     isEmailValid,
     phone,
     isPhoneValid,
+    isError
 
   ];
 
@@ -90,11 +96,11 @@ class FirstValidateState extends FirstPageState {
     email: $email,
     isEmailValid: $isEmailValid,
     phone: $phone,
-    isPhoneValid: $isPhoneValid
+    isPhoneValid: $isPhoneValid,
+    isError: $isError
     }''';
   }
 }
 
-//class MoveToNextScreenState extends FirstPageState {}
 class LoadingStateFirst extends FirstPageState {}
-class ErrorStateFirst extends FirstPageState {}
+

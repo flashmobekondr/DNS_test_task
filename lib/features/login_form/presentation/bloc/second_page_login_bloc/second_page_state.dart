@@ -12,6 +12,7 @@ class ValidateStateSecond extends SecondStatePage {
   final bool isGithubValid;
   final String resume;
   final bool isResumeValid;
+  final bool isError;
 
   bool get isFormValid => isGithubValid && isResumeValid;
 
@@ -19,29 +20,38 @@ class ValidateStateSecond extends SecondStatePage {
    this.github,
    this.isGithubValid,
    this.resume,
-   this.isResumeValid
+   this.isResumeValid,
+    this.isError
 });
 
-  factory ValidateStateSecond.initial() {
-    return ValidateStateSecond(
-        github: '',
-        isGithubValid: false,
-        resume: '',
-        isResumeValid: false,
-    );
-  }
+//  factory ValidateStateSecond.initial() {
+//    return ValidateStateSecond(
+//        github: '',
+//        isGithubValid: false,
+//        resume: '',
+//        isResumeValid: false,
+//    );
+//  }
+  ValidateStateSecond.initial():
+        github='',
+        isGithubValid=false,
+        resume = '',
+        isResumeValid = false,
+        isError = false;
 
   ValidateStateSecond copyWith ({
     String github,
     bool isGithubValid,
     String resume,
     bool isResumeValid,
+    bool isError
 }) {
     return ValidateStateSecond(
       github: github ?? this.github,
       isGithubValid: isGithubValid ?? this.isGithubValid,
       resume: resume ?? this.resume,
       isResumeValid: isResumeValid ?? this.isResumeValid,
+      isError: isError ?? this.isError
     );
   }
 
@@ -51,6 +61,7 @@ class ValidateStateSecond extends SecondStatePage {
     isGithubValid,
     resume,
     isResumeValid,
+    isError
   ];
 
   @override
@@ -60,6 +71,7 @@ class ValidateStateSecond extends SecondStatePage {
     isGithubValid: $isGithubValid,
     resume: $resume,
     isResumeValid: $isResumeValid,
+    isError: $isError
     }''';
   }
 }

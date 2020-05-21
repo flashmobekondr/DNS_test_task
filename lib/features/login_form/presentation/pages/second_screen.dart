@@ -44,13 +44,15 @@ class _SecondPageState extends State<SecondPage> {
       ),
       body: BlocListener<SecondPageBloc, SecondStatePage>(
         listener: (context, state) {
-          if (state is ErrorStateSecond) {
+          if (state is ValidateStateSecond) {
+            state.isError ?
             Scaffold.of(context).showSnackBar(
               SnackBar(
                 content: Text('Error fetching data'),
                 backgroundColor: Colors.red,
               ),
-            );
+            )
+                : Container();
           }
         },
         child: BlocBuilder<SecondPageBloc,SecondStatePage>(

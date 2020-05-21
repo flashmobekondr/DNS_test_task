@@ -46,7 +46,7 @@ class SecondPageBloc extends Bloc<SecondPageEvent, SecondStatePage> {
               currentState.github,
               currentState.resume);
         } catch(e) {
-          yield ErrorStateSecond();
+          yield currentState.copyWith(isError: true);
         }
         yield DataSentState();
       }

@@ -52,13 +52,15 @@ class _FirstPageState extends State<FirstPage> {
       ),
       body: BlocListener<FirstPageBloc, FirstPageState>(
         listener: (context, state) {
-          if (state is ErrorStateFirst) {
+          if (state is FirstValidateState) {
+            state.isError ?
             Scaffold.of(context).showSnackBar(
               SnackBar(
                 content: Text('Error fetching data'),
                 backgroundColor: Colors.red,
               ),
-            );
+            )
+                : Container();
           }
         },
         child: BlocBuilder<FirstPageBloc, FirstPageState>(

@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dnstestapi/features/login_form/domain/usecases/get_token.dart';
 import 'package:dnstestapi/features/login_form/domain/usecases/validate_data.dart';
-import 'package:dnstestapi/features/login_form/domain/entities/token.dart';
-import 'package:dnstestapi/features/login_form/presentation/bloc/authentication_page_bloc/authentication_bloc.dart';
 import 'package:dnstestapi/features/login_form/presentation/bloc/authentication_page_bloc/authentication_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './bloc.dart';
@@ -69,9 +67,8 @@ class FirstPageBloc extends Bloc<FirstPageEvent, FirstPageState> {
           await sharedPreferences.setString('CACHED_TOKEN', result.data);
           event.authenticationBloc.add(LoggedIn());
         } catch(e) {
-          yield ErrorStateFirst();
+          yield currentState.copyWith(isError: true);
         }
-        //yield MoveToNextScreenState();
       }
     }
   }
